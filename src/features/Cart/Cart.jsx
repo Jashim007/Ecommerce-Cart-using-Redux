@@ -3,7 +3,7 @@ import TotalAmount from "../../components/TotalAmount";
 import { useSelector } from "react-redux";
 const Cart = () => {
   let { cart } = useSelector((state) => state.cart);
-
+  console.log("Testing");
   return (
     <div className="min-h-[85%] w-full bg-slate-200 space-x-5 flex p-3">
       <div className="w-2/3 flex flex-col items-center justify-start rounded-md">
