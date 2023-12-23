@@ -1,10 +1,8 @@
 import SingleProduct from "./Single_product_item.jsx";
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setProductsLoadingState,
-  setProductsData,
-  setProductsErrorState,
+import { 
+  setProductsData,  
 } from "./productsSlice";
 const url = "https://fakestoreapi.com/products";
 const Products = () => {
@@ -13,37 +11,12 @@ const Products = () => {
   const dispatch = useDispatch();
 
   const hasFetchedData = useRef(false);
-
-  useEffect(() => {
-    async function fetchData(url, signal) {
-      try {
-        console.log("Loading Data from API");
-        dispatch(setProductsLoadingState());
-        let res = await fetch(url, { signal });
-        if (!res.ok) {
-          throw new Error(res);
-        }
-        let apiData = await res.json();
-        dispatch(setProductsData(apiData));
-      } catch (error) {
-        if (!signal.aborted) {
-          dispatch(setProductsErrorState(error));
-        }
-      } finally {
-        // Mark as fetched even on error to avoid re-fetching
-        hasFetchedData.current = true;
-      }
-    }
-
-    if (!hasFetchedData.current) {
-      const abortController = new AbortController();
-      const signal = abortController.signal;
-
-      fetchData(url, signal);
-
-      return () => abortController.abort();
-    }
-  }, [dispatch]);
+useEffect(() => {
+  if (!hasFetchedData.current) {
+    dispatch(setProductsData(url, hasFetchedData));
+  }
+}, [dispatch]);
+  
 
   return (
     <div className="bg-slate-200">
